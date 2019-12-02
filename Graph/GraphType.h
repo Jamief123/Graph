@@ -1,5 +1,6 @@
 #pragma once
 #include "Queue.h"
+const int NULL_EDGE = -1;
 
 // This file contains the definition of class     // GraphType that represents the Graph ADT.
 template<class VertexType>
@@ -31,7 +32,7 @@ public:
 	void AddEdge(VertexType, VertexType, int);
 	// Function: Adds an edge with the specified
 	// weight from fromVertex to toVertex.
-// Pre:  fromVertex and toVertex are in V(graph)
+	// Pre:  fromVertex and toVertex are in V(graph)
 	// Post: (fromVertex, toVertex) is in E(graph)
 	// with the specified weight.
 
@@ -133,10 +134,10 @@ template<class VertexType>
 void GraphType<VertexType>::AddEdge(VertexType fromVertex,VertexType toVertex, int weight)
 	// Post: Edge (fromVertex, toVertex) is stored in edges.
 {
-	int row;
-	int column;
-	row = IndexIs(vertices, fromVertex);
-	col = IndexIs(vertices, toVertex);
+	/*int row;
+	int column;*/
+	int row = IndexIs(vertices, fromVertex);
+	int col = IndexIs(vertices, toVertex);
 	edges[row][col] = weight;
 }
 
@@ -145,10 +146,10 @@ int GraphType<VertexType>::WeightIs(VertexType fromVertex,VertexType toVertex)
 	// Post: Function value = weight associated with the
 	// 		edge (fromVertex, toVertex).
 {
-	int row;
-	int column;
-	row = IndexIs(vertices, fromVertex);
-	col = IndexIs(vertices, toVertex);
+	/*int row;
+	int column;*/
+	int row = IndexIs(vertices, fromVertex);
+	int col = IndexIs(vertices, toVertex);
 	return edges[row][col];
 }
 
@@ -161,6 +162,6 @@ void GraphType<VertexType>::GetToVertices(VertexType vertex, queue<VertexType>& 
 	fromIndex = IndexIs(vertices, vertex);
 	for (toIndex = 0; toIndex < numVertices; toIndex++)
 		if (edges[fromIndex][toIndex] != NULL_EDGE)
-			adjvertexQ.Enqueue(vertices[toIndex]);
+			adjvertexQ.enqueue(vertices[toIndex]);
 }
 
