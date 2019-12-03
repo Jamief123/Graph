@@ -1,10 +1,8 @@
 #pragma once
-#include "Queue.h"
-const int NULL_EDGE = -1;
+#include "queue.h"
+const int NULL_EDGE = 0;
 
-// This file contains the definition of class     // GraphType that represents the Graph ADT.
 template<class VertexType>
-// Assumption: VertexType is a type for which the // "=", "==", and "<<" operators are defined
 class GraphType
 {
 public:
@@ -15,39 +13,31 @@ public:
 	void MakeEmpty();
 	// Function: Initialize graph to the empty state.
 	// Post: Graph is empty.
-
 	bool IsEmpty() const;
-	// Function: Determines if the graph is empty.
-	// Post: Function value = (graph is empty)
-
 	bool IsFull() const;
 	// Function: Determines if the graph is full.
 	// Post: Function value = (graph is full). 
-
 	void AddVertex(VertexType);
 	// Function: Adds vertex to the graph.
 	// Pre:  Graph is not full.
 	// Post: vertex is in V(graph)
-
 	void AddEdge(VertexType, VertexType, int);
 	// Function: Adds an edge with the specified
 	// weight from fromVertex to toVertex.
 	// Pre:  fromVertex and toVertex are in V(graph)
 	// Post: (fromVertex, toVertex) is in E(graph)
 	// with the specified weight.
-
 	int WeightIs(VertexType, VertexType);
 	// Function: Determines the weight of the edge
 	// from fromVertex to toVertex.
 	// Pre:  fromVertex and toVertex are in V(graph)
 	// Post: Function value = weight of 			//				(fromVertex, toVertex).
-	void GetToVertices(VertexType, queue<VertexType>&);
+	void GetToVertices(VertexType, QueType<VertexType>&);
 	// Function: Returns a queue of the vertices
 	// that are adjacent from vertex.
 	// Pre:  vertex is in V(graph).
 	// Post: vertexQ contains the names of all
 	// the vertices that are heads of edges for 	// which vertex is the tail.    
-
 	void ClearMarks();
 	// Function: Sets marks for all vertices to 	// false.
 	// Post:  All makrs have been set to false.
@@ -60,13 +50,17 @@ public:
 	// Pre:  vertex is in V(graph).
 	// Post: Function value = (vertex is marked 	// true)
 
+	void DisplayFlights();
+
+	void Test();
+
+
 private:
 	int numVertices;
 	int maxVertices;
 	VertexType* vertices;
 	int edges[50][50];
-	bool* marks;
-	// marks[i] is mark for vertices[i].
+	bool* marks; // marks[i] is mark for vertices[i].
 
 
 };
@@ -82,6 +76,7 @@ GraphType<VertexType>::GraphType()
 	maxVertices = 50;
 	vertices = new VertexType[50];
 	marks = new bool[50];
+	ClearMarks();
 }
 
 template<class VertexType>
@@ -94,6 +89,7 @@ GraphType<VertexType>::GraphType(int maxV)
 	maxVertices = maxV;
 	vertices = new VertexType[maxV];
 	marks = new bool[maxV];
+	ClearMarks();
 }
 
 template<class VertexType>
@@ -102,6 +98,18 @@ GraphType<VertexType>::~GraphType()
 {
 	delete[] vertices;
 	delete[] marks;
+}
+
+template<class VertexType>
+bool GraphType<VertexType>::IsEmpty() const
+{
+	return (numVertices == 0);
+}
+
+template<class VertexType>
+bool GraphType<VertexType>::IsFull() const
+{
+	return (numVertices == maxVertices);
 }
 
 template<class VertexType>
@@ -154,7 +162,7 @@ int GraphType<VertexType>::WeightIs(VertexType fromVertex,VertexType toVertex)
 }
 
 template<class VertexType>
-void GraphType<VertexType>::GetToVertices(VertexType vertex, queue<VertexType>& adjvertexQ)
+void GraphType<VertexType>::GetToVertices(VertexType vertex, QueType<VertexType>& adjvertexQ)
 {
 	int fromIndex;
 	int toIndex;
@@ -162,6 +170,62 @@ void GraphType<VertexType>::GetToVertices(VertexType vertex, queue<VertexType>& 
 	fromIndex = IndexIs(vertices, vertex);
 	for (toIndex = 0; toIndex < numVertices; toIndex++)
 		if (edges[fromIndex][toIndex] != NULL_EDGE)
-			adjvertexQ.enqueue(vertices[toIndex]);
+			adjvertexQ.Enqueue(vertices[toIndex]);
 }
+
+template<class VertexType>
+void GraphType<VertexType>::ClearMarks()
+{
+	for (int i = 0; i < maxVertices; i++) {
+		marks[i] = false;
+	}
+}
+
+template<class VertexType>
+void GraphType<VertexType>::MarkVertex(VertexType vertex)
+{
+	int index = 0;
+	while (!(vertex == vertices[index]))
+		index++;
+	marks[index] = true;
+}
+
+template<class VertexType>
+bool GraphType<VertexType>::IsMarked(VertexType vertex) const
+{
+
+	for (int i = 0; i < numVertices; i++) {
+		if (vertices[i] == vertex) {
+			return marks[i];
+		}
+	}
+}
+
+template<class VertexType>
+void GraphType<VertexType>::DisplayFlights()
+{
+	//foreach vertex
+	QueType<VertexType> q;
+	VertexType adjVertex;
+	int weight;
+	for (int i = 0; i < numVertices; i++) {
+		GetToVertices(vertices[i], q);
+		//get adjacent vertices
+		while (!q.IsEmpty()) {
+			adjVertex = q.Dequeue();
+			weight = WeightIs(vertices[i], adjVertex);
+			cout << vertices[i] << " to " << adjVertex << " " << weight << endl;
+		}
+	}
+	
+	
+	//display fromVertex, toVertex, and weight
+}
+
+template<class VertexType>
+void GraphType<VertexType>::Test() 
+{
+	
+}
+
 

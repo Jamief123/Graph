@@ -1,137 +1,160 @@
 #pragma once
-#include <iostream>
-#include <cstdlib>
-#include <string>
+#include <stddef.h>
+#include "iostream"
+#include "pch.h"
 using namespace std;
 
-// define default capacity of the queue
-#define SIZE 10
 
-// Class for queue
-template <class X>
-class queue
+template <class ItemType>
+struct NodeType;
+
+template <class ItemType>
+struct NodeType
 {
-	X *arr; 		// array to store queue elements
-	int capacity;   // maximum capacity of the queue
-	int front;  	// front points to front element in the queue (if any)
-	int rear;   	// rear points to last element in the queue
-	int count;  	// current size of the queue
-
-public:
-	queue(int size = SIZE);		// constructor
-
-	void dequeue();
-	void enqueue(X x);
-	X peek();
-	int size();
-	bool isEmpty();
-	bool isFull();
+	ItemType info;
+	NodeType* next;
 };
 
-// Constructor to initialize queue
-template <class X>
-queue<X>::queue(int size)
+template <class ItemType>
+class QueType
 {
-	arr = new X[size];
-	capacity = size;
-	front = 0;
-	rear = -1;
-	count = 0;
+public:
+	QueType();
+	~QueType();
+	void MakeEmpty();
+	bool IsEmpty() const;
+	bool IsFull() const;
+	void Enqueue(ItemType newItem);
+	ItemType Dequeue();
+	void Display();
+private:
+	NodeType<ItemType>* qFront;
+	NodeType<ItemType>* qRear;
+
+};
+
+
+template <class ItemType>
+QueType<ItemType>::QueType()
+// Class constructor.
+// Post:  qFront and qRear are set to NULL.
+{
+	qFront = NULL;
+	qRear = NULL;
 }
 
-// Utility function to remove front element from the queue
-template <class X>
-void queue<X>::dequeue()
+template <class ItemType>
+QueType<ItemType>::~QueType()
+// Class destructor.
 {
-	// check for queue underflow
-	if (isEmpty())
+	MakeEmpty();
+}
+
+template <class ItemType>
+void QueType<ItemType>::MakeEmpty()
+// Post: Queue is empty; all elements have been
+// deallocated.
+{
+	NodeType<ItemType>* tempPtr;
+
+	while (qFront != NULL)
 	{
-		//cout << "UnderFlow\nProgram Terminated\n";
-		exit(EXIT_FAILURE);
+		tempPtr = qFront;
+		qFront = qFront->next;
+		delete tempPtr;
 	}
-
-	//cout << "Removing " << arr[front] << '\n';
-
-	front = (front + 1) % capacity;
-	count--;
+	qRear = NULL;
 }
 
-// Utility function to add an item to the queue
-template <class X>
-void queue<X>::enqueue(X item)
+
+template <class ItemType>
+bool QueType<ItemType>::IsFull() const
+// Returns true if there is no room for another
+// ItemType on the free store;
+// false otherwise.
 {
-	// check for queue overflow
-	if (isFull())
+	NodeType<ItemType>* ptr;
+	ptr = new NodeType<ItemType>;
+	if (ptr == NULL)
+		return true;
+	else
 	{
-		//cout << "OverFlow\nProgram Terminated\n";
-		exit(EXIT_FAILURE);
+		delete ptr;
+		return false;
 	}
-
-	//cout << "Inserting " << item << '\n';
-
-	rear = (rear + 1) % capacity;
-	arr[rear] = item;
-	count++;
 }
 
-// Utility function to return front element in the queue
-template <class X>
-X queue<X>::peek()
+
+template <class ItemType>
+bool QueType<ItemType>::IsEmpty() const
+// Returns true if there are no elements on the queue; false otherwise.
 {
-	if (isEmpty())
+	return (qFront == NULL);
+}
+
+
+template <class ItemType>
+void QueType<ItemType>::Enqueue(ItemType newItem)
+// Adds newItem to the rear of the queue.
+// Pre:Queue has been initialized and is not full
+// Post: newItem is at rear of queue.
+{
+	NodeType<ItemType>* newNode;
+
+	newNode = new NodeType<ItemType>;
+	newNode->info = newItem;
+	newNode->next = NULL;
+	if (qRear == NULL)
+		qFront = newNode;
+	else
+		qRear->next = newNode;
+	qRear = newNode;
+}
+
+
+template <class ItemType>
+ItemType QueType<ItemType>::Dequeue()
+// Removes front item from the queue and returns
+// it in item.
+// Pre:  Queue has been initialized and is not
+// empty.
+// Post: Front element has been removed from
+// queue.
+//       item is a copy of removed element.
+{
+	ItemType item;
+	NodeType<ItemType>* tempPtr;
+
+	tempPtr = qFront;
+	item = qFront->info;
+	qFront = qFront->next;
+	if (qFront == NULL)
+		qRear = NULL;
+	return item;
+	delete tempPtr;
+}
+
+
+
+template <class ItemType>
+void QueType<ItemType>::Display()
+{
+	NodeType<ItemType>* tempPtr;
+
+	tempPtr = qFront;
+	if (qFront == NULL)
 	{
-		//cout << "UnderFlow\nProgram Terminated\n";
-		//exit(EXIT_FAILURE);
+		cout << "Queue is empty" << endl;
 	}
-	return arr[front];
+	else
+	{
+		while (tempPtr != NULL)
+		{
+
+			cout << tempPtr->info << " ";
+			tempPtr = tempPtr->next;
+		}
+	}
+	delete tempPtr;
 }
 
-// Utility function to return the size of the queue
-template <class X>
-int queue<X>::size()
-{
-	return count;
-}
-
-// Utility function to check if the queue is empty or not
-template <class X>
-bool queue<X>::isEmpty()
-{
-	return (size() == 0);
-}
-
-// Utility function to check if the queue is full or not
-template <class X>
-bool queue<X>::isFull()
-{
-	return (size() == capacity);
-}
-
-//// main function
-//int main()
-//{
-//	// create a queue of capacity 4
-//	queue<string> q(4);
-//
-//	q.enqueue("a");
-//	q.enqueue("b");
-//	q.enqueue("c");
-//
-//	cout << "Front element is: " << q.peek() << endl;
-//	q.dequeue();
-//
-//	q.enqueue("d");
-//
-//	cout << "Queue size is " << q.size() << endl;
-//
-//	q.dequeue();
-//	q.dequeue();
-//	q.dequeue();
-//
-//	if (q.isEmpty())
-//		cout << "Queue Is Empty\n";
-//	else
-//		cout << "Queue Is Not Empty\n";
-//
-//	return 0;
-//}
