@@ -4,13 +4,32 @@
 #include "pch.h"
 #include <iostream>
 #include "GraphType.h"
+#include <vector> 
 
 void hardcodeGraph(GraphType<string> &graph);
 using namespace std;
 int main()
 {
+	vector<string> cities;
+	cities.push_back("Dallas");
+	cities.push_back("Austin");
+	cities.push_back("Chicago");
+	cities.push_back("Denver");
+	cities.push_back("Atlanta");
+	cities.push_back("Houston");
+	cities.push_back("Washington");
 	GraphType<string> graph;
 	hardcodeGraph(graph);
+
+	for (string city : cities) {
+		queue<string> q;
+		graph.GetToVertices(city, q);
+		while (!q.isEmpty()) {
+			q.dequeue();
+			cout << city << "\t" << q.peek() << endl;
+			
+		}
+	}
 	
 }
 

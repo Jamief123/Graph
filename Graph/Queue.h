@@ -46,11 +46,11 @@ void queue<X>::dequeue()
 	// check for queue underflow
 	if (isEmpty())
 	{
-		cout << "UnderFlow\nProgram Terminated\n";
+		//cout << "UnderFlow\nProgram Terminated\n";
 		exit(EXIT_FAILURE);
 	}
 
-	cout << "Removing " << arr[front] << '\n';
+	//cout << "Removing " << arr[front] << '\n';
 
 	front = (front + 1) % capacity;
 	count--;
@@ -63,11 +63,11 @@ void queue<X>::enqueue(X item)
 	// check for queue overflow
 	if (isFull())
 	{
-		cout << "OverFlow\nProgram Terminated\n";
+		//cout << "OverFlow\nProgram Terminated\n";
 		exit(EXIT_FAILURE);
 	}
 
-	cout << "Inserting " << item << '\n';
+	//cout << "Inserting " << item << '\n';
 
 	rear = (rear + 1) % capacity;
 	arr[rear] = item;
@@ -80,8 +80,8 @@ X queue<X>::peek()
 {
 	if (isEmpty())
 	{
-		cout << "UnderFlow\nProgram Terminated\n";
-		exit(EXIT_FAILURE);
+		//cout << "UnderFlow\nProgram Terminated\n";
+		//exit(EXIT_FAILURE);
 	}
 	return arr[front];
 }
