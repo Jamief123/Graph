@@ -25,7 +25,7 @@ public:
 	bool IsEmpty() const;
 	bool IsFull() const;
 	void Enqueue(ItemType newItem);
-	ItemType Dequeue();
+	void Dequeue(ItemType& Item);
 	void Display();
 private:
 	NodeType<ItemType>* qFront;
@@ -113,7 +113,7 @@ void QueType<ItemType>::Enqueue(ItemType newItem)
 
 
 template <class ItemType>
-ItemType QueType<ItemType>::Dequeue()
+void QueType<ItemType>::Dequeue(ItemType& item)
 // Removes front item from the queue and returns
 // it in item.
 // Pre:  Queue has been initialized and is not
@@ -122,7 +122,7 @@ ItemType QueType<ItemType>::Dequeue()
 // queue.
 //       item is a copy of removed element.
 {
-	ItemType item;
+	//ItemType item;
 	NodeType<ItemType>* tempPtr;
 
 	tempPtr = qFront;
@@ -130,7 +130,7 @@ ItemType QueType<ItemType>::Dequeue()
 	qFront = qFront->next;
 	if (qFront == NULL)
 		qRear = NULL;
-	return item;
+	//return item;
 	delete tempPtr;
 }
 

@@ -76,7 +76,7 @@ GraphType<VertexType>::GraphType()
 	maxVertices = 50;
 	vertices = new VertexType[50];
 	marks = new bool[50];
-	ClearMarks();
+	//ClearMarks();
 }
 
 template<class VertexType>
@@ -89,7 +89,7 @@ GraphType<VertexType>::GraphType(int maxV)
 	maxVertices = maxV;
 	vertices = new VertexType[maxV];
 	marks = new bool[maxV];
-	ClearMarks();
+	//ClearMarks();
 }
 
 template<class VertexType>
@@ -99,6 +99,13 @@ GraphType<VertexType>::~GraphType()
 	delete[] vertices;
 	delete[] marks;
 }
+
+template<class VertexType>
+void GraphType<VertexType>::MakeEmpty()
+{
+
+}
+
 
 template<class VertexType>
 bool GraphType<VertexType>::IsEmpty() const
@@ -119,13 +126,26 @@ void GraphType<VertexType>::AddVertex(VertexType vertex)
 // 	  set to NULL_EDGE.
 //       numVertices has been incremented.
 {
-	vertices[numVertices] = vertex;
-	for (int index = 0; index < numVertices; index++)
-	{
-		edges[numVertices][index] = NULL_EDGE;
-		edges[index][numVertices] = NULL_EDGE;
+	//Not allowed to add duplicate vertex
+	bool duplicate = false;
+	for (int i = 0; i < numVertices; i++) {
+		if (vertices[i] == vertex)
+			duplicate = true;
 	}
-	numVertices++;
+
+	if (!duplicate) {
+		vertices[numVertices] = vertex;
+		for (int index = 0; index < numVertices; index++)
+		{
+			edges[numVertices][index] = NULL_EDGE;
+			edges[index][numVertices] = NULL_EDGE;
+		}
+		numVertices++;
+	}
+	else {
+		cerr << "Cannot add duplicate vertex\n";
+	}
+	
 }
 
 template<class VertexType>
@@ -184,10 +204,22 @@ void GraphType<VertexType>::ClearMarks()
 template<class VertexType>
 void GraphType<VertexType>::MarkVertex(VertexType vertex)
 {
-	int index = 0;
-	while (!(vertex == vertices[index]))
-		index++;
-	marks[index] = true;
+	for (int i = 0; i < numVertices; i++) {
+		if (vertex == vertices[i]) {
+			marks[i] = true;
+			break;
+		}
+	}
+
+	/*int index = 0;
+	while (!(vertex == vertices[index])) {
+		if (vertex == vertices[index]) {
+			marks[index] = true;
+			index++;
+		}
+		
+	}*/
+		
 }
 
 template<class VertexType>
@@ -212,14 +244,12 @@ void GraphType<VertexType>::DisplayFlights()
 		GetToVertices(vertices[i], q);
 		//get adjacent vertices
 		while (!q.IsEmpty()) {
-			adjVertex = q.Dequeue();
+			q.Dequeue(adjVertex);
 			weight = WeightIs(vertices[i], adjVertex);
 			cout << vertices[i] << " to " << adjVertex << " " << weight << endl;
 		}
 	}
 	
-	
-	//display fromVertex, toVertex, and weight
 }
 
 template<class VertexType>

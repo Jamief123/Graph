@@ -9,10 +9,10 @@
 #include "stack.h"
 #include <string>
 
-void hardcodeGraph(vector<string> &cities, GraphType<string> &graph);
-//void listFlights(vector<string> cities, GraphType<string> graph);
-void DepthFirstSearch(GraphType<string> graph, string startVertex, string endVertex);
-void BreadthFirstSearch(GraphType<string> graph, string startVertex, string endVertex);
+int DisplayMenu();
+void HardcodeGraph(vector<string> &cities, GraphType<string> &graph);
+void DepthFirstSearch(GraphType<string> &graph, string startVertex, string endVertex);
+void BreadthFirstSearch(GraphType<string> &graph, string startVertex, string endVertex);
 
 
 
@@ -22,20 +22,34 @@ int main()
 	vector<string> cities;
 	
 	GraphType<string> graph;
-	hardcodeGraph(cities,graph);
+	HardcodeGraph(cities,graph);
 	graph.DisplayFlights();
-	//graph.Test();
-	/*cout << "-----Depth First Search-----\n";
-	DepthFirstSearch(graph, "Austin", "Washington");
-	cout << "\n\n-----Breadth First Search-----\n";
-	BreadthFirstSearch(graph, "Austin", "Washington");
-	cout << "\n\n-----Flights-----\n";*/
+
+
+	string fromVertex, toVertex;
+	do{
+		cout << "\nEnter two airports to see if flight exists ('q' to quit)\n";
+		cin >> fromVertex >> toVertex;
+		if (fromVertex == "q" || toVertex == "q") {
+			break;
+		}
+		cout << "\n-----Breadth First Search-----\n";
+		BreadthFirstSearch(graph, fromVertex, toVertex);
+
+		cout << "\n-----Depth First Search-----\n";
+		DepthFirstSearch(graph, fromVertex, toVertex);
+		cout << "\n\n";
+	} while (fromVertex != "q");
+
 	
 }
 
+int DisplayMenu() {
+	return 0;
+}
 
 
-void hardcodeGraph(vector<string> &cities, GraphType<string> &graph) {
+void HardcodeGraph(vector<string> &cities, GraphType<string> &graph) {
 
 	graph.AddVertex("Atlanta");
 	graph.AddVertex("Austin");
@@ -69,7 +83,8 @@ void hardcodeGraph(vector<string> &cities, GraphType<string> &graph) {
 }
 
 
-void DepthFirstSearch(GraphType<string> graph, string startVertex, string endVertex)
+
+void DepthFirstSearch(GraphType<string> &graph, string startVertex, string endVertex)
 // Assumes VertexType is a type for which the “==“ and “<<“
 // operators are defined.
 {
@@ -97,7 +112,7 @@ void DepthFirstSearch(GraphType<string> graph, string startVertex, string endVer
 				graph.GetToVertices(vertex, vertexQ);
 				while (!vertexQ.IsEmpty())
 				{
-					item = vertexQ.Dequeue();
+					vertexQ.Dequeue(item);
 					if (!graph.IsMarked(item))
 						stack.Push(item);
 				}
@@ -108,7 +123,7 @@ void DepthFirstSearch(GraphType<string> graph, string startVertex, string endVer
 		cout << "Path not found." << endl;
 }
 
-void BreadthFirstSearch(GraphType<string> graph, string startVertex, string endVertex)
+void BreadthFirstSearch(GraphType<string> &graph, string startVertex, string endVertex)
 	// Assumes VertexType is a type for which the “==“ and “<<“
 	// operators are defined.
 {
@@ -121,7 +136,7 @@ void BreadthFirstSearch(GraphType<string> graph, string startVertex, string endV
 	queue.Enqueue(startVertex);
 	do
 	{
-		vertex = queue.Dequeue();
+		queue.Dequeue(vertex);
 		if (vertex == endVertex)
 		{
 			cout << vertex;
@@ -132,11 +147,11 @@ void BreadthFirstSearch(GraphType<string> graph, string startVertex, string endV
 			if (!graph.IsMarked(vertex))
 			{
 				graph.MarkVertex(vertex);
-				cout << vertex;
+				cout << vertex << " ";
 				graph.GetToVertices(vertex, vertexQ);
 				while (!vertexQ.IsEmpty())
 				{
-					item = vertexQ.Dequeue();
+					vertexQ.Dequeue(item);
 					if (!graph.IsMarked(item))
 						queue.Enqueue(item);
 				}
@@ -148,6 +163,7 @@ void BreadthFirstSearch(GraphType<string> graph, string startVertex, string endV
 }
 
 
+//-----Priority Queue needed. Will come back to this
 //template<class VertexType>
 //struct ItemType
 //{
