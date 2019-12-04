@@ -4,52 +4,77 @@
 #include "pch.h"
 #include <iostream>
 #include "GraphType.h"
-#include <vector> 
 #include "queue.h"
 #include "stack.h"
 #include <string>
+#include <vector>
 
 int DisplayMenu();
-void HardcodeGraph(vector<string> &cities, GraphType<string> &graph);
+void CheckForFlight();
+void Exit();
+void HardcodeGraph(GraphType<string> &graph);
 void DepthFirstSearch(GraphType<string> &graph, string startVertex, string endVertex);
 void BreadthFirstSearch(GraphType<string> &graph, string startVertex, string endVertex);
 
-
+GraphType<string> graph;
 
 using namespace std;
 int main()
 {
-	vector<string> cities;
-	
-	GraphType<string> graph;
-	HardcodeGraph(cities,graph);
-	graph.DisplayFlights();
-
+	HardcodeGraph(graph);
 
 	string fromVertex, toVertex;
+	int option;
 	do{
-		cout << "\nEnter two airports to see if flight exists ('q' to quit)\n";
-		cin >> fromVertex >> toVertex;
-		if (fromVertex == "q" || toVertex == "q") {
+		option = DisplayMenu();
+		switch (option) {
+		case 0:
+			Exit();
+			break;
+		case 1:
+			CheckForFlight();
+			break;
+		case 2:
+			system("cls");
+			graph.DisplayFlights();
+			break;
+		default:
+			cout << "\nInvalid option\n";
 			break;
 		}
-		cout << "\n-----Breadth First Search-----\n";
-		BreadthFirstSearch(graph, fromVertex, toVertex);
-
-		cout << "\n-----Depth First Search-----\n";
-		DepthFirstSearch(graph, fromVertex, toVertex);
-		cout << "\n\n";
-	} while (fromVertex != "q");
-
+	} while (option != 0);
 	
 }
 
 int DisplayMenu() {
-	return 0;
+	int option;
+	cout << "\n0. Quit";
+	cout << "\n1. Check for flight";
+	cout << "\n2. View all flights";
+	cout << "\n3. Add flight";
+	cout << endl;
+	cin >> option;
+	
+	return option;
 }
 
+void CheckForFlight() {
+	string departure, destination;
+	cout << "\nEnter departure airport\n";
+	cin >> departure;
+	cout << "\nEnter destination airport\n";
+	cin >> destination;
 
-void HardcodeGraph(vector<string> &cities, GraphType<string> &graph) {
+	DepthFirstSearch(graph, departure, destination);
+
+}
+
+void Exit() {
+	system("cls");
+	cout << "\nThank you for flying with Moylish Airlines!\n";
+}
+
+void HardcodeGraph(GraphType<string> &graph) {
 
 	graph.AddVertex("Atlanta");
 	graph.AddVertex("Austin");
@@ -58,14 +83,6 @@ void HardcodeGraph(vector<string> &cities, GraphType<string> &graph) {
 	graph.AddVertex("Denver");
 	graph.AddVertex("Houston");
 	graph.AddVertex("Washington");
-
-	cities.push_back("Dallas");
-	cities.push_back("Austin");
-	cities.push_back("Chicago");
-	cities.push_back("Denver");
-	cities.push_back("Atlanta");
-	cities.push_back("Houston");
-	cities.push_back("Washington");
 
 	graph.AddEdge("Austin", "Dallas", 200);
 	graph.AddEdge("Austin", "Houston", 160);
@@ -82,8 +99,6 @@ void HardcodeGraph(vector<string> &cities, GraphType<string> &graph) {
 	graph.AddEdge("Washington", "Dallas", 1300);
 }
 
-
-
 void DepthFirstSearch(GraphType<string> &graph, string startVertex, string endVertex)
 // Assumes VertexType is a type for which the “==“ and “<<“
 // operators are defined.
@@ -94,6 +109,7 @@ void DepthFirstSearch(GraphType<string> &graph, string startVertex, string endVe
 	string vertex;
 	string item;
 	graph.ClearMarks();
+	vector<string> airports;
 	stack.Push(startVertex);
 	do
 	{
@@ -102,13 +118,16 @@ void DepthFirstSearch(GraphType<string> &graph, string startVertex, string endVe
 		{
 			cout << vertex;
 			found = true;
+			airports.push_back(vertex);
+			//cout << endl << startVertex << " to " << endVertex << " is available.\n";
 		}
 		else
 		{
 			if (!graph.IsMarked(vertex))
 			{
 				graph.MarkVertex(vertex);
-				cout << vertex + " ";
+				//cout << vertex + " ";
+				airports.push_back(vertex);
 				graph.GetToVertices(vertex, vertexQ);
 				while (!vertexQ.IsEmpty())
 				{
@@ -119,8 +138,17 @@ void DepthFirstSearch(GraphType<string> &graph, string startVertex, string endVe
 			}
 		}
 	} while (!stack.IsEmpty() && !found);
-	if (!found)
-		cout << "Path not found." << endl;
+	if (!found) {
+		system("cls");
+		cout << endl << startVertex << " to " << endVertex << " is not available.\n";
+	}
+	else {
+		system("cls");
+		cout << endl << startVertex << " to " << endVertex << " is available.\n";
+		for (string s : airports) {
+			cout << s << " ";
+		}
+	}
 }
 
 void BreadthFirstSearch(GraphType<string> &graph, string startVertex, string endVertex)

@@ -49,10 +49,7 @@ public:
 	// Function: Determines if vertex has been 	// marked.
 	// Pre:  vertex is in V(graph).
 	// Post: Function value = (vertex is marked 	// true)
-
 	void DisplayFlights();
-
-	void Test();
 
 
 private:
@@ -61,8 +58,6 @@ private:
 	VertexType* vertices;
 	int edges[50][50];
 	bool* marks; // marks[i] is mark for vertices[i].
-
-
 };
 
 
@@ -76,7 +71,6 @@ GraphType<VertexType>::GraphType()
 	maxVertices = 50;
 	vertices = new VertexType[50];
 	marks = new bool[50];
-	//ClearMarks();
 }
 
 template<class VertexType>
@@ -89,7 +83,6 @@ GraphType<VertexType>::GraphType(int maxV)
 	maxVertices = maxV;
 	vertices = new VertexType[maxV];
 	marks = new bool[maxV];
-	//ClearMarks();
 }
 
 template<class VertexType>
@@ -211,21 +204,11 @@ void GraphType<VertexType>::MarkVertex(VertexType vertex)
 		}
 	}
 
-	/*int index = 0;
-	while (!(vertex == vertices[index])) {
-		if (vertex == vertices[index]) {
-			marks[index] = true;
-			index++;
-		}
-		
-	}*/
-		
 }
 
 template<class VertexType>
 bool GraphType<VertexType>::IsMarked(VertexType vertex) const
 {
-
 	for (int i = 0; i < numVertices; i++) {
 		if (vertices[i] == vertex) {
 			return marks[i];
@@ -252,10 +235,5 @@ void GraphType<VertexType>::DisplayFlights()
 	
 }
 
-template<class VertexType>
-void GraphType<VertexType>::Test() 
-{
-	
-}
 
 
