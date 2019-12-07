@@ -1,3 +1,1 @@
-﻿  Graph.cpp
-f:\users\jamie\desktop\graph\graph\graphtype.h(218): warning C4715: 'GraphType<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >::IsMarked': not all control paths return a value
-  Graph.vcxproj -> F:\Users\Jamie\Desktop\Graph\x64\Debug\Graph.exe
+﻿  Graph.vcxproj -> C:\Users\Jamie\Desktop\Graph\x64\Debug\Graph.exe

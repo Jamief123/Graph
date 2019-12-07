@@ -27,6 +27,7 @@ public:
 	// Pre:  fromVertex and toVertex are in V(graph)
 	// Post: (fromVertex, toVertex) is in E(graph)
 	// with the specified weight.
+	void RemoveEdge(VertexType, VertexType);
 	int WeightIs(VertexType, VertexType);
 	// Function: Determines the weight of the edge
 	// from fromVertex to toVertex.
@@ -161,6 +162,14 @@ void GraphType<VertexType>::AddEdge(VertexType fromVertex,VertexType toVertex, i
 	int row = IndexIs(vertices, fromVertex);
 	int col = IndexIs(vertices, toVertex);
 	edges[row][col] = weight;
+}
+
+template<class VertexType>
+void GraphType<VertexType>::RemoveEdge(VertexType fromVertex, VertexType toVertex)
+{
+	int row = IndexIs(vertices, fromVertex);
+	int col = IndexIs(vertices, toVertex);
+	edges[row][col] = NULL_EDGE;
 }
 
 template<class VertexType>

@@ -13,6 +13,7 @@ int DisplayMenu();
 void CheckForFlight();
 void Exit();
 void AddFlight(string depart, string arrive, int dist);
+void DeleteFlight(string depart, string arrive);
 void HardcodeGraph(GraphType<string> &graph);
 void DepthFirstSearch(GraphType<string> &graph, string startVertex, string endVertex);
 void BreadthFirstSearch(GraphType<string> &graph, string startVertex, string endVertex);
@@ -49,6 +50,13 @@ int main()
 			cin >> dist;
 			AddFlight(depart, arrive, dist);
 			break;
+		case 4:
+			cout << "Enter departure airport";
+			cin >> depart;
+			cout << "Enter arrival airport";
+			cin >> arrive;
+			DeleteFlight(depart, arrive);
+			break;
 		default:
 			cout << "\nInvalid option\n";
 			break;
@@ -63,6 +71,7 @@ int DisplayMenu() {
 	cout << "\n1. Check for flight";
 	cout << "\n2. View all flights";
 	cout << "\n3. Add flight";
+	cout << "\n4. Delete Flight";
 	cout << endl;
 	cin >> option;
 	
@@ -92,6 +101,10 @@ void AddFlight(string depart, string arrive, int dist) {
 		graph.AddVertex(arrive);
 	graph.AddEdge(depart, arrive, dist);
 	
+}
+
+void DeleteFlight(string depart, string arrive) {
+	graph.RemoveEdge(depart, arrive);
 }
 
 void HardcodeGraph(GraphType<string> &graph) {
