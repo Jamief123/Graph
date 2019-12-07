@@ -12,6 +12,7 @@
 int DisplayMenu();
 void CheckForFlight();
 void Exit();
+void AddFlight(string depart, string arrive, int dist);
 void HardcodeGraph(GraphType<string> &graph);
 void DepthFirstSearch(GraphType<string> &graph, string startVertex, string endVertex);
 void BreadthFirstSearch(GraphType<string> &graph, string startVertex, string endVertex);
@@ -23,8 +24,8 @@ int main()
 {
 	HardcodeGraph(graph);
 
-	string fromVertex, toVertex;
-	int option;
+	string fromVertex, toVertex, depart, arrive;
+	int option, dist;
 	do{
 		option = DisplayMenu();
 		switch (option) {
@@ -37,6 +38,16 @@ int main()
 		case 2:
 			system("cls");
 			graph.DisplayFlights();
+			break;
+		case 3:
+			system("cls");
+			cout << "Enter departure airport: ";
+			cin >> depart;
+			cout << "Enter arrival airport: ";
+			cin >> arrive;
+			cout << "Enter distance: ";
+			cin >> dist;
+			AddFlight(depart, arrive, dist);
 			break;
 		default:
 			cout << "\nInvalid option\n";
@@ -74,6 +85,15 @@ void Exit() {
 	cout << "\nThank you for flying with Moylish Airlines!\n";
 }
 
+void AddFlight(string depart, string arrive, int dist) {
+	if (!graph.FindAirport(depart))
+		graph.AddVertex(depart);
+	if (!graph.FindAirport(arrive))
+		graph.AddVertex(arrive);
+	graph.AddEdge(depart, arrive, dist);
+	
+}
+
 void HardcodeGraph(GraphType<string> &graph) {
 
 	graph.AddVertex("Atlanta");
@@ -83,6 +103,8 @@ void HardcodeGraph(GraphType<string> &graph) {
 	graph.AddVertex("Denver");
 	graph.AddVertex("Houston");
 	graph.AddVertex("Washington");
+	//graph.AddVertex("Limerick");
+	//graph.AddEdge("Austin", "Limerick", 20000);
 
 	graph.AddEdge("Austin", "Dallas", 200);
 	graph.AddEdge("Austin", "Houston", 160);
@@ -119,14 +141,12 @@ void DepthFirstSearch(GraphType<string> &graph, string startVertex, string endVe
 			cout << vertex;
 			found = true;
 			airports.push_back(vertex);
-			//cout << endl << startVertex << " to " << endVertex << " is available.\n";
 		}
 		else
 		{
 			if (!graph.IsMarked(vertex))
 			{
 				graph.MarkVertex(vertex);
-				//cout << vertex + " ";
 				airports.push_back(vertex);
 				graph.GetToVertices(vertex, vertexQ);
 				while (!vertexQ.IsEmpty())

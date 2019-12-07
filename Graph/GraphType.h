@@ -50,6 +50,7 @@ public:
 	// Pre:  vertex is in V(graph).
 	// Post: Function value = (vertex is marked 	// true)
 	void DisplayFlights();
+	bool FindAirport(VertexType vertex);
 
 
 private:
@@ -233,6 +234,16 @@ void GraphType<VertexType>::DisplayFlights()
 		}
 	}
 	
+}
+
+template<class VertexType>
+bool GraphType<VertexType>::FindAirport(VertexType vertex)
+{
+	for (int i = 0; i < numVertices; i++) {
+		if (vertices[i] == vertex)
+			return true;
+	}
+	return false;
 }
 
 
