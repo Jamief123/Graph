@@ -149,9 +149,10 @@ void DepthFirstSearch(GraphType<string> &graph, string startVertex, string endVe
 	do
 	{
 		vertex = stack.Pop();
+		cout << vertex;
 		if (vertex == endVertex)
 		{
-			cout << vertex;
+			/*cout << vertex;*/
 			found = true;
 			airports.push_back(vertex);
 		}
@@ -160,6 +161,7 @@ void DepthFirstSearch(GraphType<string> &graph, string startVertex, string endVe
 			if (!graph.IsMarked(vertex))
 			{
 				graph.MarkVertex(vertex);
+				//cout << vertex;
 				airports.push_back(vertex);
 				graph.GetToVertices(vertex, vertexQ);
 				while (!vertexQ.IsEmpty())
